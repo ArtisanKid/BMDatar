@@ -25,7 +25,7 @@ class Tasker:
             raise RuntimeError('未找到任务文件')
 
         self.task_file_path = path
-        file = open(self.task_file_path)
+        file = open(self.task_file_path, encoding='UTF-8')
         self.task = yaml.load(file)
 
         self.databases = self.task['(数据库)']

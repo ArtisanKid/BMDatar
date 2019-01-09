@@ -3,129 +3,141 @@
 
 class Joiner:
     inputs = {}  # 数据
-    handles = []  # 连接
+    joins = []  # 连接
 
     # inputs格式 {变量名: [{}]}
+    def __init__(self, inputs, handles):
+        if inputs is None or len(inputs) is 0:
+            raise RuntimeError('未找到上下文数据')
 
-    def __init__(self, inputs={}, handles=[]):
-        if len(inputs) == 0:
-            raise RuntimeError('未找到数据')
-
-        if len(handles) == 0:
-            raise RuntimeError('未找到连接')
+        if handles is None or len(handles) is 0:
+            raise RuntimeError('未找到加法配置')
 
         self.inputs = inputs
-        self.handles = handles
+        self.joins = handles
 
     def run(self):
-        for handle in self.handles:
-            input_names = handle['(输入值)']
+        for join in self.handles:
+            self.operate(join)
 
-            join_on = handle['(ON)']
-            join_type = handle['(类型)']  # (LEFT)/(RIGHT)/(FULL)/(INNER)
+    def operate(self, handle):
+        input_names = handle['(输入值)']
+        if len(input_names) == 0:
+            raise RuntimeError('输入值长度0')
 
-            output_name = handle['(输出值)']
-            output_rules = handle['(规则)']
+        join_on = handle['(ON)']
+        if len(join_on) == 0:
+            raise RuntimeError('On长度0')
 
-            is_first_input = True  # 支持左连接、右连接、全连接、内连接
+        # (LEFT)/(RIGHT)/(FULL)/(INNER)
+        join_type = handle['(类型)']
+        if len(join_type) == 0:
+            raise RuntimeError('类型长度0')
 
-            # output_items结构{join_on : {}}
-            output_items = {}
-            for input_name in input_names:
-                if input_name not in self.inputs.keys():
-                    raise RuntimeError('未找到数据集' + input_name)
+        output_name = handle['(输出值)']
+        if len(output_name) == 0:
+            raise RuntimeError('输出值长度0')
 
-                # 用于join的数据集
-                input_items = self.inputs[input_name]
+        output_rules = handle['(规则)']
+        if len(output_rules) == 0:
+            raise RuntimeError('规则长度0')
 
-                # 校验是否空数据集
-                if input_items is None or len(input_items) == 0:
-                    print('空数据集' + input_name)
+        is_first_input = True  # 支持左连接、右连接、全连接、内连接
 
-                    if join_type == '(INNER)':  # 如果是内连接
+        # output_items结构{join_on : {}}
+        output_items = {}
+        for input_name in input_names:
+            # 用于join的数据集
+            input_items = self.inputs[input_name]
+
+            # 校验是否空数据集
+            if input_items is None or len(input_items) == 0:
+                print('空数据集' + input_name)
+
+                if join_type == '(INNER)':  # 如果是内连接
+                    self.inputs[output_name] = []
+                    return
+
+                if is_first_input:  # 如果是首组数据
+                    if join_type == '(LEFT)':  # 如果是左连接
                         self.inputs[output_name] = []
                         return
+                    elif join_type == '(RIGHT)':  # 如果是右连接
+                        continue
+                    else:  # 如果是全连接
+                        continue
+                else:  # 如果不是首组数据
+                    if join_type == '(RIGHT)':  # 如果是右连接
+                        self.inputs[output_name] = []
+                        return
+                    elif join_type == '(LEFT)':  # 如果是左连接
+                        continue
+                    else:  # 如果是全连接
+                        continue
 
-                    if is_first_input:  # 如果是首组数据
-                        if join_type == '(LEFT)':  # 如果是左连接
-                            self.inputs[output_name] = []
-                            return
-                        elif join_type == '(RIGHT)':  # 如果是右连接
+            # 校验数据集合法性，是否包含join_on，是否排重，是否满足映射
+            tmp_input_item_join_on_values = []
+            for input_item in input_items:
+                if join_on not in input_item.keys():
+                    raise RuntimeError('未找到on' + join_on)
+
+                on_value = input_item[join_on]
+                if on_value in tmp_input_item_join_on_values:
+                    raise RuntimeError('表数据未排重' + on_value)
+
+                tmp_input_item_join_on_values.append(on_value)
+
+                # 这里需要检验input_item字段映射
+
+            # bridge_output_items用于支持各种类型的join处理
+            bridge_output_items = {}
+            if join_type == '(LEFT)':  # 左连接
+                bridge_output_items = output_items
+            elif join_type == '(FULL)':  # 全连接
+                bridge_output_items = output_items
+
+            for input_item in input_items:
+                join_on_value = input_item[join_on]
+
+                if is_first_input:  # 如果是首组数据
+                    output_item = {}
+                    self.fill_output_item(input_name, output_rules, input_item, output_item)
+                    bridge_output_items[join_on_value] = output_item
+                else:
+                    if join_type == '(LEFT)':  # 左连接
+                        if join_on_value not in output_items.keys():  # 右侧数据无效
                             continue
-                        else:  # 如果是全连接
-                            continue
-                    else:  # 如果不是首组数据
-                        if join_type == '(RIGHT)':  # 如果是右连接
-                            self.inputs[output_name] = []
-                            return
-                        elif join_type == '(LEFT)':  # 如果是左连接
-                            continue
-                        else:  # 如果是全连接
-                            continue
 
-                # 校验数据集合法性，是否包含join_on，是否排重，是否满足映射
-                tmp_input_item_join_on_values = []
-                for input_item in input_items:
-                    if join_on not in input_item.keys():
-                        raise RuntimeError('未找到on' + join_on)
-
-                    on_value = input_item[join_on]
-                    if on_value in tmp_input_item_join_on_values:
-                        raise RuntimeError('表数据未排重' + on_value)
-
-                    tmp_input_item_join_on_values.append(on_value)
-
-                    # 这里需要检验input_item字段映射
-
-                # bridge_output_items用于支持各种类型的join处理
-                bridge_output_items = {}
-                if join_type == '(LEFT)':  # 左连接
-                    bridge_output_items = output_items
-                elif join_type == '(FULL)':  # 全连接
-                    bridge_output_items = output_items
-
-                for input_item in input_items:
-                    join_on_value = input_item[join_on]
-
-                    if is_first_input:  # 如果是首组数据
-                        output_item = {}
+                        output_item = output_items[join_on_value]
                         self.fill_output_item(input_name, output_rules, input_item, output_item)
                         bridge_output_items[join_on_value] = output_item
-                    else:
-                        if join_type == '(LEFT)':  # 左连接
-                            if join_on_value not in output_items.keys():  # 右侧数据无效
-                                continue
-
+                    elif join_type == '(RIGHT)':  # 右连接
+                        if join_on_value not in output_items.keys():  # 左侧无数据
+                            output_item = self.fill_output_item(input_name, output_rules, input_item)
+                        else:
                             output_item = output_items[join_on_value]
                             self.fill_output_item(input_name, output_rules, input_item, output_item)
-                            bridge_output_items[join_on_value] = output_item
-                        elif join_type == '(RIGHT)':  # 右连接
-                            if join_on_value not in output_items.keys():  # 左侧无数据
-                                output_item = self.fill_output_item(input_name, output_rules, input_item)
-                            else:
-                                output_item = output_items[join_on_value]
-                                self.fill_output_item(input_name, output_rules, input_item, output_item)
-                            bridge_output_items[join_on_value] = output_item
-                        elif join_type == '(FULL)':  # 全连接
-                            if join_on_value not in output_items.keys():  # 左侧无数据
-                                output_item = self.fill_output_item(input_name, output_rules, input_item)
-                            else:
-                                output_item = output_items[join_on_value]
-                                self.fill_output_item(input_name, output_rules, input_item, output_item)
-                            bridge_output_items[join_on_value] = output_item
-                        else:  # 内连接
-                            if join_on_value not in output_items.keys():  # 右侧数据无效
-                                continue
-
+                        bridge_output_items[join_on_value] = output_item
+                    elif join_type == '(FULL)':  # 全连接
+                        if join_on_value not in output_items.keys():  # 左侧无数据
+                            output_item = self.fill_output_item(input_name, output_rules, input_item)
+                        else:
                             output_item = output_items[join_on_value]
                             self.fill_output_item(input_name, output_rules, input_item, output_item)
-                            bridge_output_items[join_on_value] = output_item
+                        bridge_output_items[join_on_value] = output_item
+                    else:  # 内连接
+                        if join_on_value not in output_items.keys():  # 右侧数据无效
+                            continue
 
-                is_first_input = False
-                output_items = bridge_output_items
+                        output_item = output_items[join_on_value]
+                        self.fill_output_item(input_name, output_rules, input_item, output_item)
+                        bridge_output_items[join_on_value] = output_item
 
-            values = list(output_items.values())
-            self.inputs[output_name] = values
+            is_first_input = False
+            output_items = bridge_output_items
+
+        values = list(output_items.values())
+        self.inputs[output_name] = values
 
     def fill_output_item(self, input_name, output_rules, input_item, output_item):
         if output_rules is None or len(output_rules) == 0:

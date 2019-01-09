@@ -8,68 +8,49 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.header import Header
-
-sender = "lixiangyujiayou@gmail.com"
-password = "fPMd4VR2tL2JA9jnsVe8"
-smtp_server = 'smtp.gmail.com'
-smtp_port = 587
-
-# socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 1086)
-# socks.wrapmodule(smtplib)
-
-def mail(receivers=[], subject='Test', content='Test email', image_path=''):
-    socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 1086)
-    socks.wrapmodule(smtplib)
-
-    message = MIMEMultipart()
-
-    message['From'] = Header("From 数据分析", 'utf-8')  # 发送者
-    message['To'] = Header("需求方", 'utf-8')  # 接收者
-    message['Subject'] = Header(subject, 'utf-8')
-
-    text = MIMEText(content, 'plain', 'utf-8')
-    message.attach(text)
-
-    image_data = open(image_path, 'rb').read()
-    image = MIMEImage(image_data, name=os.path.basename(image_path))
-    message.attach(image)
-
-    try:
-        server = smtplib.SMTP(smtp_server, smtp_port)
-        server.set_debuglevel(1)
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
-        server.login(sender, password)
-        server.sendmail(sender, receivers, message.as_string())
-        server.quit()
-        print("邮件发送成功")
-    except smtplib.SMTPException:
-        print("Error: 无法发送邮件")
+import utils
 
 
 class Emailer:
-    sender = "lixiangyujiayou@gmail.com"
-    password = "fPMd4VR2tL2JA9jnsVe8"
-    smtp_server = 'smtp.gmail.com'
-    smtp_port = 587
+    sender = ''
+    password = ''
+    smtp_server = ''
+    smtp_port = 0
 
-    def __init__(self, config):
+    inputs = {}  # 数据
+    emails = []  # 邮件
+
+    def __init__(self, config, inputs, handles):
+        if config is None:
+            raise RuntimeError('未找到邮箱配置')
+
+        if inputs is None or len(inputs) is 0:
+            raise RuntimeError('未找到上下文数据')
+
+        if handles is None or len(handles) is 0:
+            raise RuntimeError('未找到邮件配置')
+
+        if '(地址)' not in config.keys():
+            raise RuntimeError('未找到邮箱地址')
+
         sender = config['(地址)']
-        if sender is None or len(sender) == 0:
-            raise RuntimeError('未找到sender')
+        if len(sender) == 0:
+            raise RuntimeError('未找到邮箱地址')
 
         password = config['(密码)']
-        if password is None or len(password) == 0:
-            raise RuntimeError('未找到password')
+        if len(password) == 0:
+            raise RuntimeError('未找到邮箱密码')
 
         smtp_server = config['(服务器)']
-        if smtp_server is None or len(smtp_server) == 0:
-            raise RuntimeError('未找到smtp server')
+        if len(smtp_server) == 0:
+            raise RuntimeError('未找到邮箱服务器')
 
         smtp_port = config['(端口号)']
         if smtp_port == 0:
-            raise RuntimeError('未找到smtp port')
+            raise RuntimeError('未找到邮箱端口号')
+
+        self.inputs = inputs
+        self.emails = handles
 
         self.sender = sender
         self.password = password
@@ -79,29 +60,58 @@ class Emailer:
         socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 1086)
         socks.wrapmodule(smtplib)
 
-    def run(self, input_results={}, email={}):
+    def run(self):
+        for email in self.emails:
+            self.operate(email)
+
+    # inputs格式 {文件名: 路径}
+    def operate(self, email):
+        # (邮件):
+        #   - (收件箱):
+        #     - 'lixiangyujiayou@gmail.com'
+        #     - 'huan.cao@bitmax.io'
+        #     (标题): '(TODAY) 交易数据'
+        #     (FROM): '曹欢'
+        #     (TO): '需求方'
+        #     (内容):
+        #       - '交易数据表'
+        #       - '交易-2019-01-07.jpg'
+        #       - '交易-2019-01-07.xls'
+        #       - '这是总结'
+
         receivers = email['(收件箱)']
-        if receivers is None or len(receivers) is 0:
-            raise RuntimeError('未找到收件箱')
+        if len(receivers) is 0:
+            raise RuntimeError('收件箱长度0')
 
         title = email['(标题)']
-        if receivers is None or len(receivers) is 0:
-            raise RuntimeError('未找到标题')
+        if len(title) is 0:
+            raise RuntimeError('标题长度0')
 
-        FROM = email['(FROM)']
-        if FROM is None or len(FROM) is 0:
+        if title.count('(TODAY)'):
+            title = title.replace('(TODAY)', time.strftime('%Y-%m-%d', time.localtime()))
+
+        if title.count('(YESTERDAY)'):
+            title = title.replace('(YESTERDAY)', time.strftime('%Y-%m-%d', utils.yesterday()))
+
+        if '(FROM)' in email.keys():
+            FROM = email['(FROM)']
+            if len(FROM) is 0:
+                FROM = self.sender
+        else:
             FROM = self.sender
 
-        TO = email['(TO)']
-        if TO is None or len(TO) is 0:
-            TO = ','.join(receivers)
+        if '(TO)' in email.keys():
+            TO = email['(TO)']
+            if len(TO) is 0:
+                TO = ', '.join(receivers)
+        else:
+            TO = ', '.join(receivers)
 
         contents = email['(内容)']
-        if contents is None or len(contents) is 0:
-            raise RuntimeError('未找到内容')
+        if len(contents) is 0:
+            raise RuntimeError('内容长度0')
 
         message = MIMEMultipart()
-
         message['From'] = Header(FROM, 'utf-8')  # 发送者
         message['To'] = Header(TO, 'utf-8')  # 接收者
         message['Subject'] = Header(title, 'utf-8')
@@ -110,14 +120,20 @@ class Emailer:
             if content.count('(TODAY)'):
                 content = content.replace('(TODAY)', time.strftime('%Y-%m-%d', time.localtime()))
 
-            if content in input_results.keys():
-                path = input_results[content]
+            if content.count('(YESTERDAY)'):
+                content = content.replace('(YESTERDAY)', time.strftime('%Y-%m-%d', utils.yesterday()))
 
-                if os.path.splitext(path)[-1] == '.jpg':
+            if content in self.inputs.keys():
+                path = self.inputs[content]
+
+                file_ext = os.path.splitext(path)[-1]
+                if file_ext == '.jpg' or file_ext == '.png':
                     image_data = open(path, 'rb').read()
                     image = MIMEImage(image_data, name=content)
                     message.attach(image)
             else:
+                if content[-1] != '\n':
+                    content += '\n'
                 text = MIMEText(content, 'plain', 'utf-8')
                 message.attach(text)
 

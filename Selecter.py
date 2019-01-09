@@ -2,52 +2,58 @@
 
 import time
 import pymysql
+import utils
 
 
 class Selecter:
     databases = {}  # 数据库字典
-    handles = {}  # 筛选
+    inputs = {}  # 数据
+    selects = {}  # 筛选
 
     # inputs格式 {变量名: [{}]}
-    def __init__(self, databases={}, handles={}):
-        if len(databases) == 0:
-            raise RuntimeError('未找到数据库')
+    def __init__(self, databases, inputs, handles):
+        if inputs is None or len(databases) == 0:
+            raise RuntimeError('未找到数据库配置')
 
-        if len(handles) == 0:
-            raise RuntimeError('未找到筛选')
+        if inputs is None:
+            raise RuntimeError('未找到上下文数据')
+
+        if handles is None or len(handles) is 0:
+            raise RuntimeError('未找到加法配置')
 
         self.databases = databases
-        self.handles = handles
+        self.inputs = inputs
+        self.selects = handles
 
     def run(self):
-        outputs = {}
-        for database_name, handles in self.handles.items():
-            if database_name not in self.databases.keys():
-                raise RuntimeError('未找到筛选')
-
+        for database_name, selects in self.selects.items():
             database_config = self.databases[database_name]
+
             database_server = database_config['(服务器)']
-            if database_server is None or len(database_server) is 0:
+            if len(database_server) == 0:
                 raise RuntimeError('未找到服务器')
 
             database_port = database_config['(端口号)']
             if isinstance(database_port, str):
-                if database_port is None or len(database_port) is 0:
+                if len(database_port) == 0:
                     raise RuntimeError('未找到端口号')
                 database_port = int(database_port)
+            else:
+                if database_port <= 0:
+                    raise RuntimeError('未找到端口号')
 
             database_user = database_config['(用户名)']
-            if database_user is None or len(database_user) is 0:
+            if len(database_user) == 0:
                 raise RuntimeError('未找到用户名')
 
             database_password = database_config['(密码)']
             if isinstance(database_password, str):
-                if database_password is None or len(database_password) is 0:
+                if len(database_password) == 0:
                     raise RuntimeError('未找到密码')
             else:
                 if database_password <= 0:
                     raise RuntimeError('未找到密码')
-                database_password = '%d' % database_password
+                database_password = str(database_password)
 
             connection = pymysql.connect(host=database_server,
                                          user=database_user,
@@ -55,30 +61,40 @@ class Selecter:
                                          database=database_name,
                                          port=database_port)
 
-            for handle in handles:
-                sql = handle['(输入值)']
+            for select in selects:
+                self.operate(connection, select)
 
-                if sql.count('(TODAY)'):
-                    sql = sql.replace('(TODAY)', time.strftime('%Y-%m-%d', time.localtime()))
+    def operate(self, connection, select):
+        sql = select['(输入值)']
+        if len(sql) == 0:
+            raise RuntimeError('输入值长度0')
 
-                print(sql + '\n\n')
+        if sql.count('(TODAY)'):
+            sql = sql.replace('(TODAY)', time.strftime('%Y-%m-%d', time.localtime()))
 
-                output_name = handle['(输出值)']
-                output_fields = handle['(字段)']
+        if sql.count('(YESTERDAY)'):
+            sql = sql.replace('(YESTERDAY)', time.strftime('%Y-%m-%d', utils.yesterday()))
 
-                cursor = connection.cursor()
-                cursor.execute(sql)
-                results = cursor.fetchall()
+        print(sql + '\n\n')
 
-                dics = []
-                for result in results:
-                    dic = {}
-                    for index in range(len(output_fields)):
-                        dic[output_fields[index]] = result[index]
-                    dics.append(dic)
+        output_name = select['(输出值)']
+        if len(output_name) == 0:
+            raise RuntimeError('输出值长度0')
 
-                outputs[output_name] = dics
+        output_fields = select['(字段)']
+        if len(output_fields) == 0:
+            raise RuntimeError('输出字段长度0')
 
-                cursor.close()
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        results = cursor.fetchall()
 
-        return outputs
+        dics = []
+        for result in results:
+            dic = {}
+            for index in range(len(output_fields)):
+                dic[output_fields[index]] = result[index]
+            dics.append(dic)
+        self.inputs[output_name] = dics
+
+        cursor.close()

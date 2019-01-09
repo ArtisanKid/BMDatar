@@ -1,1 +1,4 @@
+**/task/*
 **/*.yaml
+__pycache__
+**/outputs/

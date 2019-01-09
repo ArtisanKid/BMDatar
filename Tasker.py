@@ -5,7 +5,9 @@ import yaml
 from Selecter import Selecter
 from Joiner import Joiner
 from Unioner import Unioner
+from Adder import Adder
 from Minuser import Minuser
+from Grouper import Grouper
 from Outputer import Outputer
 from Emailer import Emailer
 
@@ -46,8 +48,8 @@ class Tasker:
                 key = list(segment.keys())[0]
                 value = list(segment.values())[0]
                 if key == '(SELECT)':
-                    selecter = Selecter(self.databases, value)
-                    results = selecter.run()
+                    selecter = Selecter(self.databases, results, value)
+                    selecter.run()
                     print(results)
                 elif key == '(JOIN)':
                     joiner = Joiner(results, value)
@@ -57,14 +59,22 @@ class Tasker:
                     unioner = Unioner(results, value)
                     unioner.run()
                     print(results)
+                elif key == '(ADD)':
+                    adder = Adder(results, value)
+                    minuser.run()
+                    print(results)
                 elif key == '(MINUS)':
                     minuser = Minuser(results, value)
                     minuser.run()
+                    print(results)
+                elif key == '(GROUP)':
+                    grouper = Grouper(results, value)
+                    grouper.run()
                     print(results)
                 elif key == '(输出)':
                     outputer = Outputer(results, value)
                     outputer.run()
                     print(results)
                 elif key == '(邮件)':
-                    emailer = Emailer(self.email)
-                    emailer.run(results, value)
+                    emailer = Emailer(self.email, results, value)
+                    emailer.run()

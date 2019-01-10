@@ -8,7 +8,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.header import Header
-import utils
+import Keywords
 
 
 class Emailer:
@@ -24,10 +24,10 @@ class Emailer:
         if config is None:
             raise RuntimeError('未找到邮箱配置')
 
-        if inputs is None or len(inputs) is 0:
+        if inputs is None or len(inputs) == 0:
             raise RuntimeError('未找到上下文数据')
 
-        if handles is None or len(handles) is 0:
+        if handles is None or len(handles) == 0:
             raise RuntimeError('未找到邮件配置')
 
         if '(地址)' not in config.keys():
@@ -87,11 +87,7 @@ class Emailer:
         if len(title) is 0:
             raise RuntimeError('标题长度0')
 
-        if title.count('(TODAY)'):
-            title = title.replace('(TODAY)', time.strftime('%Y-%m-%d', time.localtime()))
-
-        if title.count('(YESTERDAY)'):
-            title = title.replace('(YESTERDAY)', time.strftime('%Y-%m-%d', utils.yesterday()))
+        title = Keywords.active_date(title)
 
         if '(FROM)' in email.keys():
             FROM = email['(FROM)']
@@ -117,11 +113,7 @@ class Emailer:
         message['Subject'] = Header(title, 'utf-8')
 
         for content in contents:
-            if content.count('(TODAY)'):
-                content = content.replace('(TODAY)', time.strftime('%Y-%m-%d', time.localtime()))
-
-            if content.count('(YESTERDAY)'):
-                content = content.replace('(YESTERDAY)', time.strftime('%Y-%m-%d', utils.yesterday()))
+            content = Keywords.active_date(content)
 
             if content in self.inputs.keys():
                 path = self.inputs[content]

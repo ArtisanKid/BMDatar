@@ -2,7 +2,7 @@
 
 import time
 import pymysql
-import utils
+import Keywords
 
 
 class Selecter:
@@ -64,16 +64,22 @@ class Selecter:
             for select in selects:
                 self.operate(connection, select)
 
+            connection.close()
+
     def operate(self, connection, select):
+        # gdm:
+        #   - (输入值): >
+        #       SELECT *FROM Table;
+        #     (输出值): 原始注册数据
+        #     (字段):
+        #       - type
+        #       - count
+
         sql = select['(输入值)']
         if len(sql) == 0:
             raise RuntimeError('输入值长度0')
 
-        if sql.count('(TODAY)'):
-            sql = sql.replace('(TODAY)', time.strftime('%Y-%m-%d', time.localtime()))
-
-        if sql.count('(YESTERDAY)'):
-            sql = sql.replace('(YESTERDAY)', time.strftime('%Y-%m-%d', utils.yesterday()))
+        sql = Keywords.active_date(sql)
 
         print(sql + '\n\n')
 

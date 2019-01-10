@@ -7,10 +7,10 @@ class Minuser:
 
     # inputs格式 {变量名: [{}]}
     def __init__(self, inputs, handles):
-        if inputs is None or len(inputs) is 0:
+        if inputs is None or len(inputs) == 0:
             raise RuntimeError('未找到上下文数据')
 
-        if handles is None or len(handles) is 0:
+        if handles is None or len(handles) == 0:
             raise RuntimeError('未找到加法配置')
 
         self.inputs = inputs
@@ -57,5 +57,5 @@ class Minuser:
                     raise RuntimeError('被减数长度0')
 
                 output_item[key] = input_item[minus_key] - input_item[minused_key]
-
+            output_items.append(output_item)
         self.inputs[output_name] = output_items

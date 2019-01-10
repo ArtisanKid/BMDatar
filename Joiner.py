@@ -7,38 +7,38 @@ class Joiner:
 
     # inputs格式 {变量名: [{}]}
     def __init__(self, inputs, handles):
-        if inputs is None or len(inputs) is 0:
+        if inputs is None or len(inputs) == 0:
             raise RuntimeError('未找到上下文数据')
 
-        if handles is None or len(handles) is 0:
+        if handles is None or len(handles) == 0:
             raise RuntimeError('未找到加法配置')
 
         self.inputs = inputs
         self.joins = handles
 
     def run(self):
-        for join in self.handles:
+        for join in self.joins:
             self.operate(join)
 
-    def operate(self, handle):
-        input_names = handle['(输入值)']
+    def operate(self, join):
+        input_names = join['(输入值)']
         if len(input_names) == 0:
             raise RuntimeError('输入值长度0')
 
-        join_on = handle['(ON)']
+        join_on = join['(ON)']
         if len(join_on) == 0:
             raise RuntimeError('On长度0')
 
         # (LEFT)/(RIGHT)/(FULL)/(INNER)
-        join_type = handle['(类型)']
+        join_type = join['(类型)']
         if len(join_type) == 0:
             raise RuntimeError('类型长度0')
 
-        output_name = handle['(输出值)']
+        output_name = join['(输出值)']
         if len(output_name) == 0:
             raise RuntimeError('输出值长度0')
 
-        output_rules = handle['(规则)']
+        output_rules = join['(规则)']
         if len(output_rules) == 0:
             raise RuntimeError('规则长度0')
 
@@ -51,7 +51,7 @@ class Joiner:
             input_items = self.inputs[input_name]
 
             # 校验是否空数据集
-            if input_items is None or len(input_items) == 0:
+            if len(input_items) == 0:
                 print('空数据集' + input_name)
 
                 if join_type == '(INNER)':  # 如果是内连接
@@ -113,14 +113,16 @@ class Joiner:
                         bridge_output_items[join_on_value] = output_item
                     elif join_type == '(RIGHT)':  # 右连接
                         if join_on_value not in output_items.keys():  # 左侧无数据
-                            output_item = self.fill_output_item(input_name, output_rules, input_item)
+                            output_item = {}
+                            self.fill_output_item(input_name, output_rules, input_item, output_item)
                         else:
                             output_item = output_items[join_on_value]
                             self.fill_output_item(input_name, output_rules, input_item, output_item)
                         bridge_output_items[join_on_value] = output_item
                     elif join_type == '(FULL)':  # 全连接
                         if join_on_value not in output_items.keys():  # 左侧无数据
-                            output_item = self.fill_output_item(input_name, output_rules, input_item)
+                            output_item = {}
+                            self.fill_output_item(input_name, output_rules, input_item, output_item)
                         else:
                             output_item = output_items[join_on_value]
                             self.fill_output_item(input_name, output_rules, input_item, output_item)
@@ -139,22 +141,62 @@ class Joiner:
         values = list(output_items.values())
         self.inputs[output_name] = values
 
+    def left_join(self):
+        pass
+
+    def right_join(self):
+        pass
+
+    def full_join(self):
+        pass
+
+    def inner_join(self):
+        pass
+
+    # input_name: 输入数据集名称
+    # output_rules: 输出规则
+    # input_item: 输入项
+    # output_item: 输出项
+    #
+    # 此方法用于将input_item的字段按照output_rules设置到output_item中
     def fill_output_item(self, input_name, output_rules, input_item, output_item):
+        # output_rules
+        # (规则):
+        #   输出字段名:
+        #     (字段): 输入数据集.字段
+        #     (默认值): Asset
+
+        if input_name is None or len(input_name) == 0:
+            raise RuntimeError('未找到数据集')
+
+        if input_name is None or len(input_name) == 0:
+            raise RuntimeError('未找到数据集')
+
         if output_rules is None or len(output_rules) == 0:
-            for key, value in input_item.items():
-                if key in output_item.keys():
-                    raise RuntimeError('重复字段' + key)
+            raise RuntimeError('未找到规则')
 
-                output_item[key] = value  # 直接将input_item作为output_item
-            return output_item
+        if input_item is None:
+            raise RuntimeError('未找到输入项')
 
+        if output_item is None:
+            raise RuntimeError('未找到输出项')
+
+        # 如果没有输出规则，说明需要所有字段
         for output_item_key, config in output_rules.items():
-            input_name_item_key = config['(字段)']
-            tmps = input_name_item_key.split('.')
-            rule_input_name = tmps[0]
-            rule_item_key = tmps[1]
+            rule_input_name = None
+            rule_item_key = None
 
-            if rule_input_name == input_name:  # 非此数据集映射规则
+            path = config['(字段)']
+            if path.count('.') != 0:
+                components = path.split('.')
+                rule_input_name = components[0]
+                rule_item_key = components[1]
+            else:
+                rule_item_key = path
+
+            # 如果rule_input_name是None，表示所有数据集的字段都可以填充
+            # rule_input_name是当前数据集，表示可以填充
+            if rule_input_name is None or rule_input_name == input_name:
                 output_item[output_item_key] = input_item[rule_item_key]
             else:
                 if output_item_key not in output_item.keys():

@@ -4,7 +4,7 @@ import os
 import time
 import Imager
 import Exceler
-import utils
+import Keywords
 
 
 class Outputer:
@@ -50,21 +50,12 @@ class Outputer:
             if len(output_name) == 0:
                 raise RuntimeError('输出值长度0')
 
-            if output_name.count('(TODAY)'):
-                output_name = output_name.replace('(TODAY)', time.strftime('%Y-%m-%d', time.localtime()))
-
-            if output_name.count('(YESTERDAY)'):
-                output_name = output_name.replace('(YESTERDAY)', time.strftime('%Y-%m-%d', utils.yesterday()))
+            output_name = Keywords.active_date(output_name)
 
             # 如果有path，那么用path作为输出路径，否则自定义路径
             if '(输入值)' in config.keys():
                 path = config['(输入值)']
-
-                if path.count('(TODAY)'):
-                    path = path.replace('(TODAY)', time.strftime('%Y-%m-%d', time.localtime()))
-
-                if path.count('(YESTERDAY)'):
-                    path = path.replace('(YESTERDAY)', time.strftime('%Y-%m-%d', utils.yesterday()))
+                path = Keywords.active_date(path)
             else:
                 outputs_dir = os.path.join(os.path.dirname(__file__), "outputs")
                 if os.path.exists(outputs_dir) is False:

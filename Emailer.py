@@ -3,12 +3,12 @@
 import os
 import socks
 import smtplib
-import time
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.header import Header
 import Keywords
+# import base64
 
 
 class Emailer:
@@ -17,21 +17,18 @@ class Emailer:
     smtp_server = ''
     smtp_port = 0
 
-    inputs = {}  # 数据
     emails = []  # 邮件
+    inputs = {}  # 数据
 
-    def __init__(self, config, inputs, handles):
+    def __init__(self, config: dict, emails: list, inputs: dict):
         if config is None:
             raise RuntimeError('未找到邮箱配置')
 
         if inputs is None or len(inputs) == 0:
             raise RuntimeError('未找到上下文数据')
 
-        if handles is None or len(handles) == 0:
+        if emails is None or len(emails) == 0:
             raise RuntimeError('未找到邮件配置')
-
-        if '(地址)' not in config.keys():
-            raise RuntimeError('未找到邮箱地址')
 
         sender = config['(地址)']
         if len(sender) == 0:
@@ -50,7 +47,7 @@ class Emailer:
             raise RuntimeError('未找到邮箱端口号')
 
         self.inputs = inputs
-        self.emails = handles
+        self.emails = emails
 
         self.sender = sender
         self.password = password
@@ -112,22 +109,39 @@ class Emailer:
         message['To'] = Header(TO, 'utf-8')  # 接收者
         message['Subject'] = Header(title, 'utf-8')
 
+        # html = '<html><body><table>'
         for content in contents:
             content = Keywords.active_date(content)
-
             if content in self.inputs.keys():
                 path = self.inputs[content]
-
                 file_ext = os.path.splitext(path)[-1]
                 if file_ext == '.jpg' or file_ext == '.png':
                     image_data = open(path, 'rb').read()
+
+                    # html += '<tr><td>'
+                    # img_base64 = str(base64.b64encode(image_data), encoding="utf-8")
+                    # html += '<img src="data:image/png;base64,' + img_base64 + '" width="720" height="360"/>'
+                    # html += '</td></tr>'
+
+                    # html += '<tr><td><img src="https://assets.growingio.com/webapp1/img-13iYfFi.png"></td></tr>'
+
                     image = MIMEImage(image_data, name=content)
                     message.attach(image)
             else:
                 if content[-1] != '\n':
                     content += '\n'
-                text = MIMEText(content, 'plain', 'utf-8')
+
+                # html += '<tr><td><h2>'
+                # html += content
+                # html += '</h2></td></tr>'
+
+                content = '<h2>' + content + '</h2>'
+                text = MIMEText(_text=content, _subtype='html', _charset='utf-8')
                 message.attach(text)
+
+        # html += '</table></body></html>'
+        # text = MIMEText(_text=html, _subtype='html', _charset='utf-8')
+        # message.attach(text)
 
         server = smtplib.SMTP(self.smtp_server, self.smtp_port)
         server.set_debuglevel(1)

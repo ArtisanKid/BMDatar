@@ -1,3 +1,5 @@
+#!/usr/local/bin/python3
+
 import Utils
 
 
@@ -6,7 +8,13 @@ def active_date(str):
     if str.count('(TODAY)'):
         str = str.replace('(TODAY)', Utils.today_YMD())
 
+    if str.count('{TODAY}'):
+        str = str.replace('{TODAY}', Utils.today_YMD())
+
     if str.count('(YESTERDAY)'):
         str = str.replace('(YESTERDAY)', Utils.yesterday_YMD())
+
+    if str.count('{YESTERDAY}'):
+        str = str.replace('{YESTERDAY}', Utils.yesterday_YMD())
 
     return str

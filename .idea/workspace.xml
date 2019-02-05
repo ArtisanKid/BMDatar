@@ -4,9 +4,6 @@
     <list default="true" id="91ba3391-4559-45ae-a7e9-262e5fddb3e3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Emailer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Emailer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GioTasker.py" beforeDir="false" afterPath="$PROJECT_DIR$/GioTasker.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TaskRun.py" beforeDir="false" afterPath="$PROJECT_DIR$/TaskRun.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tasker.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tasker.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +45,7 @@
         <counts>
           <entry key="gitignore" value="1" />
           <entry key="png" value="2" />
-          <entry key="py" value="181" />
+          <entry key="py" value="182" />
           <entry key="pyi" value="1" />
           <entry key="yaml" value="5" />
         </counts>
@@ -57,20 +54,20 @@
         <counts>
           <entry key="Image" value="2" />
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="181" />
+          <entry key="Python" value="182" />
           <entry key="PythonStub" value="1" />
           <entry key="YAML" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="11149" />
+          <entry key="py" value="11154" />
           <entry key="yaml" value="548" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="11149" />
+          <entry key="Python" value="11154" />
           <entry key="YAML" value="548" />
         </counts>
       </usages-collector>
@@ -102,8 +99,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TaskRun.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="49" column="23" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
+            <state relative-caret-position="638">
+              <caret line="29" column="41" selection-start-line="29" selection-start-column="41" selection-end-line="29" selection-end-column="41" />
               <folding>
                 <element signature="e#26#35#0" expanded="true" />
               </folding>
@@ -111,13 +108,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Emailer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
+            <state relative-caret-position="258">
+              <caret line="60" column="76" selection-start-line="60" selection-start-column="76" selection-end-line="60" selection-end-column="76" />
               <folding>
                 <element signature="e#26#35#0" expanded="true" />
+                <marker date="1549374996612" expanded="true" signature="1669:1678" ph="..." />
               </folding>
             </state>
           </provider>
@@ -132,11 +130,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gios/ dashboard1.yaml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="792">
               <caret line="36" column="23" lean-forward="true" selection-start-line="36" selection-start-column="23" selection-end-line="36" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Keywords.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
             </state>
           </provider>
         </entry>
@@ -211,11 +218,11 @@
         <option value="$PROJECT_DIR$/Uploader.py" />
         <option value="$PROJECT_DIR$/gios/ dashboard1.yaml" />
         <option value="$PROJECT_DIR$/GioTasker.py" />
-        <option value="$PROJECT_DIR$/Emailer.py" />
         <option value="$PROJECT_DIR$/Tasker.py" />
         <option value="$PROJECT_DIR$/tasks/register_recharge_draw.yaml" />
         <option value="$PROJECT_DIR$/TaskRun.py" />
         <option value="$PROJECT_DIR$/GioOutputer.py" />
+        <option value="$PROJECT_DIR$/Emailer.py" />
       </list>
     </option>
   </component>
@@ -1834,13 +1841,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Keywords.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="8" column="28" lean-forward="true" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
@@ -2572,16 +2572,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TaskRun.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="49" column="23" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
-          <folding>
-            <element signature="e#26#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/GioOutputer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="501">
@@ -2592,13 +2582,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Emailer.py">
+    <entry file="file://$PROJECT_DIR$/Keywords.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
-          <folding>
-            <element signature="e#26#35#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="330">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
@@ -2606,6 +2593,27 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="792">
           <caret line="36" column="23" lean-forward="true" selection-start-line="36" selection-start-column="23" selection-end-line="36" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TaskRun.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="638">
+          <caret line="29" column="41" selection-start-line="29" selection-start-column="41" selection-end-line="29" selection-end-column="41" />
+          <folding>
+            <element signature="e#26#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Emailer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="60" column="76" selection-start-line="60" selection-start-column="76" selection-end-line="60" selection-end-column="76" />
+          <folding>
+            <element signature="e#26#35#0" expanded="true" />
+            <marker date="1549374996612" expanded="true" signature="1669:1678" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

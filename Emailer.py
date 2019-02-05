@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 
 import os
+import platform
 import socks
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -55,8 +56,14 @@ class Emailer:
         self.smtp_server = smtp_server
         self.smtp_port = smtp_port
 
-        socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 1086)
-        socks.wrapmodule(smtplib)
+        sysstr = platform.system()
+        if sysstr == "Windows":
+            socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 1080)
+            socks.wrapmodule(smtplib)
+        else:
+            socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 1086)
+            socks.wrapmodule(smtplib)
+
 
     def run(self):
         receivers = self.email['(收件箱)']

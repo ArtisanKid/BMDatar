@@ -2,23 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="91ba3391-4559-45ae-a7e9-262e5fddb3e3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/EventAnalysisTable.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GioOutputer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GioTasker.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/GrowingIO.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PageViewRunChart.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Uploader.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/UserVisitRunChart.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/BMDatar.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/BMDatar.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Emailer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Emailer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HTMLer.py" beforeDir="false" afterPath="$PROJECT_DIR$/HTMLer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Imager.py" beforeDir="false" afterPath="$PROJECT_DIR$/Imager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Keywords.py" beforeDir="false" afterPath="$PROJECT_DIR$/Keywords.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/QuickData.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GioTasker.py" beforeDir="false" afterPath="$PROJECT_DIR$/GioTasker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TaskRun.py" beforeDir="false" afterPath="$PROJECT_DIR$/TaskRun.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tasker.py" beforeDir="false" afterPath="$PROJECT_DIR$/Tasker.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,7 +15,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/BMDatar$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1549203181813" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BMDatar$Unnamed.coverage" NAME="Unnamed Coverage Results" MODIFIED="1549362161914" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -58,30 +46,32 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="gitignore" value="1" />
           <entry key="png" value="2" />
-          <entry key="py" value="180" />
+          <entry key="py" value="181" />
           <entry key="pyi" value="1" />
-          <entry key="yaml" value="4" />
+          <entry key="yaml" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Image" value="2" />
-          <entry key="Python" value="180" />
+          <entry key="PLAIN_TEXT" value="1" />
+          <entry key="Python" value="181" />
           <entry key="PythonStub" value="1" />
-          <entry key="YAML" value="4" />
+          <entry key="YAML" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="10727" />
-          <entry key="yaml" value="386" />
+          <entry key="py" value="11149" />
+          <entry key="yaml" value="548" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="10727" />
-          <entry key="YAML" value="386" />
+          <entry key="Python" value="11149" />
+          <entry key="YAML" value="548" />
         </counts>
       </usages-collector>
     </session>
@@ -89,25 +79,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/GrowingIO.py">
+        <entry file="file://$PROJECT_DIR$/Tasker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-127">
-              <caret line="33" column="18" selection-start-line="33" selection-start-column="18" selection-end-line="33" selection-end-column="18" />
-              <folding>
-                <element signature="e#26#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/GioTasker.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="48" column="31" selection-start-line="48" selection-start-column="31" selection-end-line="48" selection-end-column="31" />
-              <folding>
-                <element signature="e#26#35#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="1069">
+              <caret line="78" column="27" selection-start-line="78" selection-start-column="20" selection-end-line="78" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -115,8 +90,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GioOutputer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-6194">
-              <caret line="14" column="18" lean-forward="true" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
+            <state relative-caret-position="501">
+              <caret line="375" column="36" selection-start-line="375" selection-start-column="36" selection-end-line="375" selection-end-column="36" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -125,28 +100,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/gios/ dashboard1.yaml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="359">
-              <caret line="41" column="14" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/TaskRun.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="467">
-              <caret line="31" column="42" lean-forward="true" selection-start-line="31" selection-start-column="42" selection-end-line="31" selection-end-column="42" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Emailer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
-              <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
+            <state relative-caret-position="445">
+              <caret line="49" column="23" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
               <folding>
                 <element signature="e#26#35#0" expanded="true" />
               </folding>
@@ -155,10 +112,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Uploader.py">
+        <entry file="file://$PROJECT_DIR$/Emailer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
+            <state relative-caret-position="396">
+              <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
+              <folding>
+                <element signature="e#26#35#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tasks/register_recharge_draw.yaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="378">
+              <caret line="305" column="34" selection-start-line="305" selection-start-column="34" selection-end-line="305" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/gios/ dashboard1.yaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="792">
+              <caret line="36" column="23" lean-forward="true" selection-start-line="36" selection-start-column="23" selection-end-line="36" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -174,7 +152,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>output_rules</find>
       <find>rule_item_keyrule_item_key</find>
       <find>get_auth</find>
       <find>plot</find>
@@ -204,6 +181,7 @@
       <find>outputs</find>
       <find>dashboard</find>
       <find>inputs</find>
+      <find>email</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -215,29 +193,29 @@
         <option value="$PROJECT_DIR$/Sumer.py" />
         <option value="$PROJECT_DIR$/Adder.py" />
         <option value="$PROJECT_DIR$/tasks/trade.yaml" />
-        <option value="$PROJECT_DIR$/Tasker.py" />
         <option value="$PROJECT_DIR$/utils.py" />
         <option value="$PROJECT_DIR$/Minuser.py" />
         <option value="$PROJECT_DIR$/Selecter.py" />
         <option value="$PROJECT_DIR$/Grouper.py" />
         <option value="$PROJECT_DIR$/Outputer.py" />
         <option value="$PROJECT_DIR$/Joiner.py" />
-        <option value="$PROJECT_DIR$/tasks/register_recharge_draw.yaml" />
         <option value="$PROJECT_DIR$/HTMLer.py" />
         <option value="$PROJECT_DIR$/EventAnalysisTable.py" />
         <option value="$PROJECT_DIR$/PageViewRunChart.py" />
         <option value="$PROJECT_DIR$/GioTask.py" />
         <option value="$PROJECT_DIR$/UserVisitRunChart.py" />
-        <option value="$PROJECT_DIR$/GioTasker.py" />
         <option value="$PROJECT_DIR$/Keywords.py" />
         <option value="$PROJECT_DIR$/Utils.py" />
         <option value="$PROJECT_DIR$/Imager.py" />
         <option value="$PROJECT_DIR$/GrowingIO.py" />
         <option value="$PROJECT_DIR$/Uploader.py" />
         <option value="$PROJECT_DIR$/gios/ dashboard1.yaml" />
-        <option value="$PROJECT_DIR$/GioOutputer.py" />
+        <option value="$PROJECT_DIR$/GioTasker.py" />
         <option value="$PROJECT_DIR$/Emailer.py" />
+        <option value="$PROJECT_DIR$/Tasker.py" />
+        <option value="$PROJECT_DIR$/tasks/register_recharge_draw.yaml" />
         <option value="$PROJECT_DIR$/TaskRun.py" />
+        <option value="$PROJECT_DIR$/GioOutputer.py" />
       </list>
     </option>
   </component>
@@ -373,7 +351,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.6351351" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3958904" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.6712329" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -409,20 +387,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///usr/local/lib/python3.7/site-packages/mpl_toolkits/axisartist/axislines.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="570" column="8" selection-start-line="570" selection-start-column="8" selection-end-line="570" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python3.7/site-packages/matplotlib/transforms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="2026" column="8" selection-start-line="2026" selection-start-column="8" selection-end-line="2026" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/lib/python3.7/site-packages/matplotlib/backends/backend_pgf.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="24134">
@@ -1811,13 +1775,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Tasker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="79" column="33" lean-forward="true" selection-start-line="78" selection-start-column="20" selection-end-line="79" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Exceler.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -2567,47 +2524,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Uploader.py">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GioOutputer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6194">
-          <caret line="14" column="18" lean-forward="true" selection-start-line="14" selection-start-column="18" selection-end-line="14" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/GioTasker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="48" column="31" selection-start-line="48" selection-start-column="31" selection-end-line="48" selection-end-column="31" />
-          <folding>
-            <element signature="e#26#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gios/ dashboard1.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="41" column="14" selection-start-line="41" selection-start-column="14" selection-end-line="41" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Emailer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
-          <folding>
-            <element signature="e#26#35#0" expanded="true" />
-          </folding>
+        <state>
+          <caret column="7" selection-start-column="3" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -2621,10 +2541,71 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/GioTasker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="489">
+          <caret line="55" column="30" selection-start-line="55" selection-start-column="30" selection-end-line="55" selection-end-column="30" />
+          <folding>
+            <element signature="e#26#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Uploader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="24" lean-forward="true" selection-start-column="24" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tasks/register_recharge_draw.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="305" column="34" selection-start-line="305" selection-start-column="34" selection-end-line="305" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tasker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1069">
+          <caret line="78" column="27" selection-start-line="78" selection-start-column="20" selection-end-line="78" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/TaskRun.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="31" column="42" lean-forward="true" selection-start-line="31" selection-start-column="42" selection-end-line="31" selection-end-column="42" />
+        <state relative-caret-position="445">
+          <caret line="49" column="23" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
+          <folding>
+            <element signature="e#26#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GioOutputer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="501">
+          <caret line="375" column="36" selection-start-line="375" selection-start-column="36" selection-end-line="375" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Emailer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
+          <folding>
+            <element signature="e#26#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gios/ dashboard1.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="792">
+          <caret line="36" column="23" lean-forward="true" selection-start-line="36" selection-start-column="23" selection-end-line="36" selection-end-column="23" />
         </state>
       </provider>
     </entry>

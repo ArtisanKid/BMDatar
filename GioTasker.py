@@ -12,7 +12,7 @@ class GioTasker:
 
     projects: dict = {}  # 项目字典
     dashboards = {}  # 看板字典
-    email_config = {}  # 邮箱配置
+    mailbox = {}  # 邮箱
     handles = []  # 处理数组
 
     def __init__(self, path: str):
@@ -38,14 +38,12 @@ class GioTasker:
 
         self.projects = self.task['(项目)']
         self.dashboards = self.task['(看板)']
-        self.email_config = self.task['(邮箱)']
+        self.mailbox = self.task['(邮箱)']
         self.handles = self.task['(处理)']
 
     def run(self):
         outputs = {}
         for handle in self.handles:
-            results = {}
-
             if '(类型)' not in handle.keys():
                 raise RuntimeError('not find (类型)')
 
@@ -55,5 +53,5 @@ class GioTasker:
                 outputer = GioOutputer(self.projects, self.dashboards, handle, outputs)
                 outputer.run()
             elif handle_type == '(邮件)':
-                emailer = Emailer(self.email_config, outputs, [handle])
+                emailer = Emailer(self.mailbox, handle, outputs)
                 emailer.run()

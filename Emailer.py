@@ -17,37 +17,38 @@ class Emailer:
     smtp_server = ''
     smtp_port = 0
 
-    emails = []  # 邮件
+    email = {}  # 邮件
     inputs = {}  # 数据
 
-    def __init__(self, config: dict, emails: list, inputs: dict):
-        if config is None:
-            raise RuntimeError('未找到邮箱配置')
+    # inputs格式 {文件名: 路径}
+    def __init__(self, mailbox: dict, email: dict, inputs: dict):
+        if mailbox is None:
+            raise RuntimeError('未找到邮箱')
 
-        if inputs is None or len(inputs) == 0:
-            raise RuntimeError('未找到上下文数据')
-
-        if emails is None or len(emails) == 0:
+        if email is None:
             raise RuntimeError('未找到邮件配置')
 
-        sender = config['(地址)']
+        if inputs is None:
+            raise RuntimeError('未找到上下文数据')
+
+        sender = mailbox['(地址)']
         if len(sender) == 0:
             raise RuntimeError('未找到邮箱地址')
 
-        password = config['(密码)']
+        password = mailbox['(密码)']
         if len(password) == 0:
             raise RuntimeError('未找到邮箱密码')
 
-        smtp_server = config['(服务器)']
+        smtp_server = mailbox['(服务器)']
         if len(smtp_server) == 0:
             raise RuntimeError('未找到邮箱服务器')
 
-        smtp_port = config['(端口号)']
+        smtp_port = mailbox['(端口号)']
         if smtp_port == 0:
             raise RuntimeError('未找到邮箱端口号')
 
+        self.email = email
         self.inputs = inputs
-        self.emails = emails
 
         self.sender = sender
         self.password = password
@@ -58,50 +59,32 @@ class Emailer:
         socks.wrapmodule(smtplib)
 
     def run(self):
-        for email in self.emails:
-            self.operate(email)
-
-    # inputs格式 {文件名: 路径}
-    def operate(self, email):
-        # (邮件):
-        #   - (收件箱):
-        #     - 'lixiangyujiayou@gmail.com'
-        #     - 'huan.cao@bitmax.io'
-        #     (标题): '(TODAY) 交易数据'
-        #     (FROM): '曹欢'
-        #     (TO): '需求方'
-        #     (内容):
-        #       - '交易数据表'
-        #       - '交易-2019-01-07.jpg'
-        #       - '交易-2019-01-07.xls'
-        #       - '这是总结'
-
-        receivers = email['(收件箱)']
+        receivers = self.email['(收件箱)']
         if len(receivers) is 0:
             raise RuntimeError('收件箱长度0')
 
-        title = email['(标题)']
+        title = self.email['(标题)']
         if len(title) is 0:
             raise RuntimeError('标题长度0')
 
         title = Keywords.active_date(title)
 
-        if '(FROM)' in email.keys():
-            FROM = email['(FROM)']
+        if '(FROM)' in self.email.keys():
+            FROM = self.email['(FROM)']
             if len(FROM) is 0:
                 FROM = self.sender
         else:
             FROM = self.sender
 
-        if '(TO)' in email.keys():
-            TO = email['(TO)']
+        if '(TO)' in self.email.keys():
+            TO = self.email['(TO)']
             if len(TO) is 0:
                 TO = ', '.join(receivers)
         else:
             TO = ', '.join(receivers)
 
-        contents = email['(内容)']
-        if len(contents) is 0:
+        contents: list = self.email['(内容)']
+        if len(contents) == 0:
             raise RuntimeError('内容长度0')
 
         message = MIMEMultipart()
@@ -111,11 +94,33 @@ class Emailer:
 
         # html = '<html><body><table>'
         for content in contents:
-            content = Keywords.active_date(content)
-            if content in self.inputs.keys():
-                path = self.inputs[content]
-                file_ext = os.path.splitext(path)[-1]
-                if file_ext == '.jpg' or file_ext == '.png':
+            # (类型): (文本)  # (文本)、(图片)
+            # (字号): (H1)
+            # (输入): '全部用户页面浏览量趋势图'
+            content_type = content['(类型)']
+            if content_type == '(文本)':
+                font_size = content['(字号)']
+
+            input_key = content['(输入)']
+            input_key = Keywords.active_date(input_key)
+
+            if content_type == '(文本)':
+                if input_key[-1] != '\n':
+                    input_key += '\n'
+
+                # html += '<tr><td><h2>'
+                # html += content
+                # html += '</h2></td></tr>'
+
+                content = '<%s>%s</%s>' % (font_size, input_key, font_size)
+                text = MIMEText(_text=content, _subtype='html', _charset='utf-8')
+                message.attach(text)
+            else:
+                if input_key not in self.inputs.keys():
+                    raise RuntimeError('未找到 %s 路径' % input_key)
+
+                path = self.inputs[input_key]
+                if content_type == '(图片)':
                     image_data = open(path, 'rb').read()
 
                     # html += '<tr><td>'
@@ -125,19 +130,8 @@ class Emailer:
 
                     # html += '<tr><td><img src="https://assets.growingio.com/webapp1/img-13iYfFi.png"></td></tr>'
 
-                    image = MIMEImage(image_data, name=content)
+                    image = MIMEImage(image_data, name=input_key)
                     message.attach(image)
-            else:
-                if content[-1] != '\n':
-                    content += '\n'
-
-                # html += '<tr><td><h2>'
-                # html += content
-                # html += '</h2></td></tr>'
-
-                content = '<h2>' + content + '</h2>'
-                text = MIMEText(_text=content, _subtype='html', _charset='utf-8')
-                message.attach(text)
 
         # html += '</table></body></html>'
         # text = MIMEText(_text=html, _subtype='html', _charset='utf-8')

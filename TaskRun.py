@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 
 import os
+import sys
 from Tasker import Tasker
 from GioTasker import GioTasker
 
@@ -38,5 +39,15 @@ def gio_task_run():
         tasker.run()
 
 
-database_task_run()
-gio_task_run()
+if len(sys.argv) < 2:
+    print('缺少参数！请使用：python TaskRun.py database\n或者使用：python TaskRun.py gio')
+    exit(1)
+
+arg_type = sys.argv[1]
+
+if arg_type == 'database':
+    database_task_run()
+elif arg_type == 'gio':
+    gio_task_run()
+
+# gio_task_run()

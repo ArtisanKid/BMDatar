@@ -76,5 +76,5 @@ class Tasker:
                     outputer.run()
                     print(results)
                 elif key == '(邮件)':
-                    emailer = Emailer(self.email, results, value)
+                    emailer = Emailer(self.email, value, results)
                     emailer.run()

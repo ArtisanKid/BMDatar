@@ -265,8 +265,11 @@ class GioOutputer:
                 if index == time_dimension_index:
                     row[index] = Utils.unix_timestamp_MD(row[index])
                 elif index >= len(dimensions):
-                    if row[index] != None:
+                    if row[index] == int(row[index]):
+                        row[index] = int(row[index])
+                    else:
                         row[index] = round(float(row[index]), 2)
+
             rows.append(row)
 
         columns = {}

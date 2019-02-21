@@ -1,4 +1,5 @@
 **/task/*
 **/*.yaml
+**/*.sql
 __pycache__
 **/outputs/

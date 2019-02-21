@@ -15,8 +15,8 @@ def data_frame_to_jpg(title: str, data_frame: DataFrame, path: str):
     # ax.set_title(title)  # 图标题
     ax.axis('off')
 
-    table: Table = ax.table(cellText=data_frame.values,
-                            cellLoc='center',  # colWidths=[2] * data_frame.values.shape[1],
+    table: Table = ax.table(cellText=data_frame.values,  # cellColours=None,
+                            cellLoc='center', # colWidths=[2] * data_frame.values.shape[1],
                             # rowLabels=data_frame.index,
                             colLabels=data_frame.columns, colLoc='center',
                             loc='center')

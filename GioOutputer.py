@@ -11,6 +11,11 @@ import Utils
 import GrowingIO
 import Imager
 
+import GioOutputer_nRbX0Lzo
+import GioOutputer_EoZLXeqR
+import GioOutputer_lPQqm4vP
+import GioOutputer_39lYy4dR
+
 
 class GioOutputer:
     project: str = None  # 项目
@@ -43,35 +48,8 @@ class GioOutputer:
         self.chart_configs = handle['(配置)']
         self.outputs = outputs
 
-    # "meta":[{"name":"目标用户","dimension":true},
-    #         {"name":"时间","dimension":true},
-    #         {"name":"页面浏览量","metric":true},
-    #         {"name":"访问量","metric":true},
-    #         {"name":"用户量","metric":true}]
-    # datas: [["全部访问用户", 1546873200000, 55186.0, 5974.0, 2708.0]]
-    def single_chart(self, title: str, datas: list, dimensions: list, metrics: list):
-        x_axis = []
-        y_axis = []
-        lines: dict = {}  # {metric: line}
-
-        # dimensions中第一个是 '目标用户'
-        dimension_count = len(dimensions)
-
-        for data in datas:
-            x = Utils.unix_timestamp_MD(int(data[1]))
-            if x not in x_axis:
-                x_axis.append(x)
-
-            for index in range(len(metrics)):
-                y = data[dimension_count + index]
-
-                legend = metrics[index]
-                if legend not in lines.keys():
-                    lines[legend] = []
-
-                line: list = lines[legend]
-                line.append(y)
-
+    # lines: {metric: line}
+    def create_single_chart(self, title: str, x_axis: list, lines: dict):
         fig: Figure = pyplot.figure(figsize=(12, 6))  # 创建绘图对象
         ax: Axes = fig.add_subplot(1, 1, 1)
 
@@ -103,6 +81,48 @@ class GioOutputer:
         fig.savefig(path, dpi=200)
 
         self.outputs[Utils.outputs_name(title)] = path
+
+    def create_table(self, title: str, column_titles: list, rows: list, metrics: list):
+        array = numpy.array(rows)
+        data_frame = pandas.DataFrame(data=array, columns=column_titles)
+        data_frame = data_frame[column_titles]
+        data_frame.sort_values(by=metrics)
+
+        path = Utils.outputs_path(title)
+        Imager.data_frame_to_jpg(title, data_frame, path)
+
+        self.outputs[Utils.outputs_name(title)] = path
+
+    # "meta":[{"name":"目标用户","dimension":true},
+    #         {"name":"时间","dimension":true},
+    #         {"name":"页面浏览量","metric":true},
+    #         {"name":"访问量","metric":true},
+    #         {"name":"用户量","metric":true}]
+    # datas: [["全部访问用户", 1546873200000, 55186.0, 5974.0, 2708.0]]
+    def single_chart(self, title: str, datas: list, dimensions: list, metrics: list):
+        x_axis = []
+        y_axis = []
+        lines: dict = {}  # {metric: line}
+
+        # dimensions中第一个是 '目标用户'
+        dimension_count = len(dimensions)
+
+        for data in datas:
+            x = Utils.unix_timestamp_MD(int(data[1]))
+            if x not in x_axis:
+                x_axis.append(x)
+
+            for index in range(len(metrics)):
+                y = data[dimension_count + index]
+
+                legend = metrics[index]
+                if legend not in lines.keys():
+                    lines[legend] = []
+
+                line: list = lines[legend]
+                line.append(y)
+
+        self.create_single_chart(title, x_axis, lines)
 
     # "meta":[{"name": "目标用户", "dimension": true},
     #         {"name": "时间", "dimension": true},
@@ -272,21 +292,23 @@ class GioOutputer:
 
             rows.append(row)
 
-        columns = {}
-        for index in range(len(titles)):
-            column = []
-            for row in rows:
-                column.append(row[index])
-            columns[titles[index]] = column
-
-        data_frame = pandas.DataFrame(data=columns, columns=titles)
-        data_frame = data_frame[titles]
-        data_frame.sort_values(by=metrics)
-
-        path = Utils.outputs_path(title)
-        Imager.data_frame_to_jpg(title, data_frame, path)
-
-        self.outputs[Utils.outputs_name(title)] = path
+        self.create_table(title, titles, rows, metrics)
+        #
+        # columns = {}
+        # for index in range(len(titles)):
+        #     column = []
+        #     for row in rows:
+        #         column.append(row[index])
+        #     columns[titles[index]] = column
+        #
+        # data_frame = pandas.DataFrame(data=columns, columns=titles)
+        # data_frame = data_frame[titles]
+        # data_frame.sort_values(by=metrics)
+        #
+        # path = Utils.outputs_path(title)
+        # Imager.data_frame_to_jpg(title, data_frame, path)
+        #
+        # self.outputs[Utils.outputs_name(title)] = path
 
     def create_chart(self, chart: dict):
         if 'id' not in chart.keys():
@@ -301,19 +323,26 @@ class GioOutputer:
         # if chart_name != '广告监测':
         #     return
 
-        if chart_name in self.chart_configs.keys():
-            config: dict = self.chart_configs[chart_name]
+        if chart_name not in self.chart_configs.keys():
+            return
 
-            if '(天)' not in config.keys():
-                raise RuntimeError('not found (天)')
+        days = 7
+        interval = 86400000
 
-            days = config['(天)']
-            if days == 1:
-                response = GrowingIO.get_chart(self.project, chart_id, 1, 3600000)
-            else:
-                response = GrowingIO.get_chart(self.project, chart_id, days, 86400000)
-        else:
-            response = GrowingIO.get_chart(self.project, chart_id)
+        config: dict = self.chart_configs[chart_name]
+        if config is not None:
+            if '(天)' in config.keys():
+                days = config['(天)']
+                if days == 1:
+                    interval = 3600000
+
+            if '(单位)' in config.keys():
+                if config['(单位)'] == '(天)':
+                    interval = 86400000
+                elif config['(单位)'] == '(小时)':
+                    interval = 3600000
+
+        response = GrowingIO.get_chart(self.project, chart_id, days, interval)
 
         # 这里判断是图表还是表格
 
@@ -326,44 +355,54 @@ class GioOutputer:
         metas: dict = response['meta']
         datas: list = response['data']
 
-        dimensions = []
-        metrics = []
-        for meta in metas:
-            if 'name' not in meta.keys():
-                raise RuntimeError('not found meta')
+        if chart_id == 'nRbX0Lzo':
+            GioOutputer_nRbX0Lzo.output(chart_name, metas, datas, self)
+        elif chart_id == 'EoZLXeqR':
+            GioOutputer_EoZLXeqR.output(chart_name, metas, datas, self)
+        elif chart_id == 'lPQqm4vP':
+            GioOutputer_lPQqm4vP.output(chart_name, metas, datas, self)
+        elif chart_id == '39lYy4dR':
+            GioOutputer_39lYy4dR.output(chart_name, metas, datas, self)
+        else:
+            dimensions = []
+            metrics = []
+            for meta in metas:
+                if 'name' not in meta.keys():
+                    raise RuntimeError('not found meta')
 
-            name = meta['name']
-            if 'dimension' in meta.keys():
-                dimensions.append(name)
-            elif 'metric' in meta.keys():
-                metrics.append(name)
-            else:
-                raise RuntimeError('not found dimension or metric')
+                name = meta['name']
+                if 'dimension' in meta.keys():
+                    dimensions.append(name)
+                elif 'metric' in meta.keys():
+                    metrics.append(name)
+                else:
+                    raise RuntimeError('not found dimension or metric')
 
-        # 如果维度=(目标用户+其他)，则为单趋势图
-        # 如果维度=(目标用户+其他+其他)且有两个变量，则为双趋势图，两个变量分两个图表
-        # 如果维度=(目标用户+其他+其他...)，则为表格
+            # 如果维度=(目标用户+其他)，则为单趋势图
+            # 如果维度=(目标用户+其他+其他)且有两个变量，则为双趋势图，两个变量分两个图表
+            # 如果维度=(目标用户+其他+其他...)，则为表格
 
-        if len(dimensions) < 2:
-            raise RuntimeError('dimensions count error')
+            if len(dimensions) < 2:
+                raise RuntimeError('dimensions count error')
 
-        if len(metrics) < 1:
-            raise RuntimeError('metrics count error')
+            if len(metrics) < 1:
+                raise RuntimeError('metrics count error')
 
-        if len(dimensions) == 2:
-            if dimensions[0] == '目标用户':
-                # pass
-                self.single_chart(chart_name, datas, dimensions, metrics)
-            else:
-                raise RuntimeError('dimensions error')
-        elif len(dimensions) == 3 and len(metrics) == 2:
-            if dimensions[0] == '目标用户':
-                # pass
-                self.double_chart(chart_name, datas, dimensions, metrics)
+            if len(dimensions) == 2:
+                if dimensions[0] == '目标用户':
+                    # pass
+                    self.single_chart(chart_name, datas, dimensions, metrics)
+                else:
+                    pass
+                    # raise RuntimeError('dimensions error')
+            elif len(dimensions) == 3 and len(metrics) == 2:
+                if dimensions[0] == '目标用户':
+                    # pass
+                    self.double_chart(chart_name, datas, dimensions, metrics)
+                else:
+                    self.table(chart_name, datas, dimensions, metrics)
             else:
                 self.table(chart_name, datas, dimensions, metrics)
-        else:
-            self.table(chart_name, datas, dimensions, metrics)
 
     def run(self):
         response = GrowingIO.get_dashboard(self.project, self.dashboard)

@@ -45,19 +45,18 @@ def get_params(days: int = 7, interval: int = 86400000):
     return params
 
 
-def get_dashboard(project: str = '1P6j1bVP', dashboard: str = 'GR4jBQao'):
+def get_dashboard(project: str, dashboard: str):
     headers = get_headers()
     url = 'https://www.growingio.com/projects/%s/dashboards/%s.json' % (project, dashboard)
     response = requests.get(url, headers=headers)
-    print('dashboard %s is %s' % (dashboard, response.text))
+    print('dashboard %s\n%s\n\n' % (dashboard, response.text))
     return response.json()
 
 
-def get_chart(project: str = '1P6j1bVP', chart: str = 'noqL2nAP', days: int = 7, interval: int = 86400000):
+def get_chart(project: str, chart: str, days: int = 7, interval: int = 86400000):
     headers = get_headers()
     params = get_params(days, interval)
     url = 'https://www.growingio.com/v2/projects/%s/charts/%s.json' % (project, chart)
     response = requests.get(url, headers=headers, params=params)
-    print('chart %s is %s' % (chart, response.text))
+    print('chart %s\n%s\n\n' % (chart, response.text))
     return response.json()
-

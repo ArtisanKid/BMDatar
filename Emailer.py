@@ -64,7 +64,6 @@ class Emailer:
             socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, '127.0.0.1', 1086)
             socks.wrapmodule(smtplib)
 
-
     def run(self):
         receivers = self.email['(收件箱)']
         if len(receivers) is 0:
@@ -104,14 +103,15 @@ class Emailer:
             # (类型): (文本)  # (文本)、(图片)
             # (字号): (H1)
             # (输入): '全部用户页面浏览量趋势图'
-            content_type = content['(类型)']
-            if content_type == '(文本)':
-                font_size = content['(字号)']
 
             input_key = content['(输入)']
             input_key = Keywords.active_date(input_key)
 
+            content_type = content['(类型)']
             if content_type == '(文本)':
+                font_size: str = content['(字号)']
+                font_size = font_size.strip('()')
+
                 if input_key[-1] != '\n':
                     input_key += '\n'
 
@@ -144,11 +144,15 @@ class Emailer:
         # text = MIMEText(_text=html, _subtype='html', _charset='utf-8')
         # message.attach(text)
 
+        print('开始发送邮件...')
+
         server = smtplib.SMTP(self.smtp_server, self.smtp_port)
-        server.set_debuglevel(1)
+        # server.set_debuglevel(1)
         server.ehlo()
         server.starttls()
         server.ehlo()
         server.login(self.sender, self.password)
         server.sendmail(self.sender, receivers, message.as_string())
         server.quit()
+
+        print('邮件已发送')

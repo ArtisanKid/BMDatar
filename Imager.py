@@ -26,6 +26,8 @@ def data_frame_to_jpg(title: str, data_frame: DataFrame, path: str):
     # pyplot.show()
     fig.savefig(path, dpi=200)
 
+    pyplot.close(fig)
+
 
 def html2jpg(html: str, path: str):
     imgkit.from_string(html, path)

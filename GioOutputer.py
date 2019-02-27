@@ -15,6 +15,10 @@ import GioOutputer_nRbX0Lzo
 import GioOutputer_EoZLXeqR
 import GioOutputer_lPQqm4vP
 import GioOutputer_39lYy4dR
+import GioOutputer_bR7NDvY9
+import GioOutputer_4PKzOGyR
+import GioOutputer_lPQzDeno
+import GioOutputer_qPkNbYlR
 
 
 class GioOutputer:
@@ -79,6 +83,8 @@ class GioOutputer:
 
         path = Utils.outputs_path(title)
         fig.savefig(path, dpi=200)
+
+        pyplot.close(fig)
 
         self.outputs[Utils.outputs_name(title)] = path
 
@@ -251,6 +257,8 @@ class GioOutputer:
         path = Utils.outputs_path(title)
         fig.savefig(path, dpi=200)
 
+        pyplot.close(fig)
+
         self.outputs[Utils.outputs_name(title)] = path
 
     # "meta":[{"name":"目标用户","dimension":true},
@@ -363,6 +371,14 @@ class GioOutputer:
             GioOutputer_lPQqm4vP.output(chart_name, metas, datas, self)
         elif chart_id == '39lYy4dR':
             GioOutputer_39lYy4dR.output(chart_name, metas, datas, self)
+        elif chart_id == 'bR7NDvY9':
+            GioOutputer_bR7NDvY9.output(chart_name, metas, datas, self)
+        elif chart_id == '4PKzOGyR':
+            GioOutputer_4PKzOGyR.output(chart_name, metas, datas, self)
+        elif chart_id == 'lPQzDeno':
+            GioOutputer_lPQzDeno.output(chart_name, metas, datas, self)
+        elif chart_id == 'qPkNbYlR':
+            GioOutputer_qPkNbYlR.output(chart_name, metas, datas, self)
         else:
             dimensions = []
             metrics = []

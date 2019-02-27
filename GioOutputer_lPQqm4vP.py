@@ -22,7 +22,7 @@ def output(title: str, metas: list, datas: list, outputer):
         elif name == "时间":
             time_index = i
         else:
-            if name == "注册成功_人":
+            if name == "web 注册成功_人":
                 register_count_index = i
             titles.append(name)
 
@@ -38,4 +38,4 @@ def output(title: str, metas: list, datas: list, outputer):
                 row.append(data[index])
         rows.append(row)
 
-    outputer.create_table(title, titles, rows, ["注册成功_人"])
+    outputer.create_table(title, titles, rows, ["web 注册成功_人"])

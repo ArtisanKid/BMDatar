@@ -3,21 +3,18 @@
 # from GioOutputer import GioOutputer
 
 
-# web端新访问用户转化（来源分布）-gio
-#
+# app端全部访问用户注册（国家分布）-Android
 # "meta":[{"name":"目标用户","dimension":true},
 #         {"name":"时间","dimension":true},
-#         {"name":"访问来源","dimension":true},
+#         {"name":"国家名称","dimension":true},
 #         {"name":"用户量","metric":true},
-#         {"name":"web 注册成功_人","metric":true},
-#         {"name":"web 交易成功_人","metric":true}]
-# "data":[["新访问用户",1550678400000,"直接访问",1491.0,62.0,47.0]]
+#         {"name":"APP 注册成功_人","metric":true}]
+# "data":[["新访问用户",1550541600000,"中国",108.0,0.0]]
 def output(title: str, metas: list, datas: list, outputer):
     target_user_index = 0
     time_index = 0
     user_count_index = 0
     register_count_index = 0
-    trade_count_index = 0
 
     titles = []
     for i in range(len(metas)):
@@ -29,10 +26,8 @@ def output(title: str, metas: list, datas: list, outputer):
         else:
             if name == "用户量":
                 user_count_index = i
-            elif name == "web 注册成功_人":
+            elif name == "APP 注册成功_人":
                 register_count_index = i
-            elif name == "web 交易成功_人":
-                trade_count_index = i
             titles.append(name)
 
     rows = []
@@ -41,10 +36,10 @@ def output(title: str, metas: list, datas: list, outputer):
         for index in range(len(data)):
             if index == target_user_index or index == time_index:
                 continue
-            elif index == user_count_index or index == register_count_index or index == trade_count_index:
+            elif index == user_count_index or index == register_count_index:
                 row.append(int(data[index]))
             else:
                 row.append(data[index])
         rows.append(row)
 
-    outputer.create_table(title, titles, rows[0:10], ["用户量"])
+    outputer.create_table(title, titles, rows[0:10], ["APP 注册成功_人"])
